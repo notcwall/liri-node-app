@@ -148,13 +148,13 @@ function omdbRequest(title){
 				console.log("Invalid search term. Default:");
 				omdbRequest("mr-nobody");
 			}
-		fs.appendFile('log.txt', "" + log + "\r\n,\r\n", function(err){
-			if(err){
-				console.log(err);
-				return;
-			}
-		});
-	}
+			fs.appendFile('log.txt', "" + log + "\r\n,\r\n", function(err){
+				if(err){
+					console.log(err);
+					return;
+				}
+			});
+		}
 	});
 }
 
