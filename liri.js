@@ -21,7 +21,7 @@ function spotifySearch(trackName){
 				"\r\n Track: " + data.tracks.items[i].name +
 				"\r\n Album: " + data.tracks.items[i].album.name +
 				"\r\n Preview: " + data.tracks.items[i].external_urls.spotify + "\r\n-\r\n";
-				console.log("\n\n\n" + "Artist: " + data.tracks.items[i].artists[0].name + "\n" + 
+				console.log("\n" + "Artist: " + data.tracks.items[i].artists[0].name + "\n" + 
 					"Track: " + data.tracks.items[i].name + "\n" + 
 					"Album: " + data.tracks.items[i].album.name + "\n" +
 					"Preview: " + data.tracks.items[i].external_urls.spotify);
@@ -49,7 +49,7 @@ function tweets(){
 		console.log("Last 20 tweets from user @" + userName.screen_name + "\n----------");
 		for(var i = tweets.length - 1; i > tweets.length - 20; i--){
 			log = log + tweets[i].created_at + "\r\n" + tweets[i].text + "\r\n-\r\n";
-			console.log(tweets[i].created_at + "\n" + tweets[i].text + "\n\n\n");
+			console.log(tweets[i].created_at + "\n" + tweets[i].text + "\n");
 			if(tweets[i - 1] == undefined){
 				i = tweets.length - 20;
 			}
