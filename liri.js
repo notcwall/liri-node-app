@@ -7,6 +7,7 @@ var userName = keys.screen_name;
 var request = require('request');
 var command = process.argv[2];
 var userInput = process.argv[3];
+var log = "";
 
 function spotifySearch(trackName){
 	spotify.search({ type: 'track', query: trackName}, function(err, data){
@@ -14,8 +15,7 @@ function spotifySearch(trackName){
 			console.log("Error occurred: " + err);
 			return;
 		}
-		if(data.tracks.items[0] != undefined){
-			var log = "";
+		else if(data.tracks.items[0] != undefined){
 			for(var i = 1; i <= data.tracks.items.length; i++){
 				if(data.tracks.items[i] != undefined){
 					log = log + "\n" + i + "\r\nArtist: " + data.tracks.items[i].artists[0].name +
@@ -46,26 +46,41 @@ function spotifySearch(trackName){
 }
 
 function tweets(){
-	client.get('statuses/user_timeline', userName, function(error, tweets, response){
-		if(error){
-			console.log(error);
-		}
-		var log = "Last 20 tweets from user @" + userName.screen_name + "\r\n----------\r\n";
-		console.log("Last 20 tweets from user @" + userName.screen_name + "\n----------");
-		for(var i = tweets.length - 1; i > tweets.length - 20; i--){
-			log = log + tweets[i].created_at + "\r\n" + tweets[i].text + "\r\n-\r\n";
-			console.log(tweets[i].created_at + "\n" + tweets[i].text + "\n");
-			if(tweets[i - 1] == undefined){
-				i = tweets.length - 20;
+	if(userName != undefined){
+		client.get('statuses/user_timeline', userName, function(error, tweets, response){
+			if(error){
+				log = error[0].message;
+				console.log(error);
 			}
-		}
+			else{
+				log = "Last 20 tweets from user @" + userName.screen_name + "\r\n----------\r\n";
+				console.log("Last 20 tweets from user @" + userName.screen_name + "\n----------");
+				for(var i = tweets.length - 1; i > tweets.length - 20; i--){
+					log = log + tweets[i].created_at + "\r\n" + tweets[i].text + "\r\n-\r\n";
+					console.log(tweets[i].created_at + "\n" + tweets[i].text + "\n");
+					if(tweets[i - 1] == undefined){
+						i = tweets.length - 20;
+					}
+				}
+			}
+			fs.appendFile('log.txt', "" + log + "\r\n,\r\n", function(err){
+				if(err){
+					console.log(err);
+					return;
+				}
+			});	
+		});
+	}
+	else{
+		log = "Twitter user name is undefined.";
+		console.log("Twitter user name is undefined.");
 		fs.appendFile('log.txt', "" + log + ",\r\n", function(err){
 			if(err){
 				console.log(err);
 				return;
 			}
-		});
-	});
+		});	
+	}
 }
 
 function omdbRequest(title){
@@ -112,7 +127,7 @@ function omdbRequest(title){
 						searchTomatoesURL = result[i].split('":')[1].split('"')[1];
 					}
 				}
-				var log = "Title: " + searchTitle +
+				log = "Title: " + searchTitle +
 					"\r\nYear: " + searchYear +
 					"\r\nIMDB Rating: " + searchRating +
 					"\r\nLanguage(s): " + searchLanguage +
