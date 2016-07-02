@@ -71,69 +71,75 @@ function tweets(){
 function omdbRequest(title){
 	request('http://www.omdbapi.com/?t=' + title + '&&y=&&r=json&&plot=short&&tomatoes=true', function (error, response, body){
 		if(!error && response.statusCode == 200){
-			var result = [];
-			result = body.split('",');
-			var searchTitle = "";
-			var searchYear = "";
-			var searchRating = "";
-			var searchCountry = "";
-			var searchLanguage = "";
-			var searchPlot = "";
-			var searchActors = "";
-			var searchTomatoesRating = "";
-			var searchTomatoesURL = "";
-			for(var i = 0; i < result.length; i++){
-				if(result[i].includes("Title")){
-					searchTitle = result[i].split(':')[1].split('"')[1];
+			if(!body.includes("Movie not found!")){
+				var result = [];
+				result = body.split('",');
+				var searchTitle = "";
+				var searchYear = "";
+				var searchRating = "";
+				var searchCountry = "";
+				var searchLanguage = "";
+				var searchPlot = "";
+				var searchActors = "";
+				var searchTomatoesRating = "";
+				var searchTomatoesURL = "";
+				for(var i = 0; i < result.length; i++){
+					if(result[i].includes("Title")){
+						searchTitle = result[i].split(':')[1].split('"')[1];
+					}
+					if(result[i].includes("Year")){
+						searchYear = result[i].split(':')[1].split('"')[1];
+					}
+					if(result[i].includes("imdbRating")){
+						searchRating = result[i].split(':')[1].split('"')[1];
+					}
+					if(result[i].includes("Country")){
+						searchCountry = result[i].split(':')[1].split('"')[1];
+					}
+					if(result[i].includes("Language")){
+						searchLanguage = result[i].split(':')[1].split('"')[1];
+					}
+					if(result[i].includes("Plot")){
+						searchPlot = result[i].split(':')[1].split('"')[1];
+					}
+					if(result[i].includes("Actors")){
+						searchActors = result[i].split(':')[1].split('"')[1];
+					}
+					if(result[i].includes("tomatoRating")){
+						searchTomatoesRating = result[i].split(':')[1].split('"')[1];
+					}
+					if(result[i].includes("tomatoURL")){
+						searchTomatoesURL = result[i].split('":')[1].split('"')[1];
+					}
 				}
-				if(result[i].includes("Year")){
-					searchYear = result[i].split(':')[1].split('"')[1];
-				}
-				if(result[i].includes("imdbRating")){
-					searchRating = result[i].split(':')[1].split('"')[1];
-				}
-				if(result[i].includes("Country")){
-					searchCountry = result[i].split(':')[1].split('"')[1];
-				}
-				if(result[i].includes("Language")){
-					searchLanguage = result[i].split(':')[1].split('"')[1];
-				}
-				if(result[i].includes("Plot")){
-					searchPlot = result[i].split(':')[1].split('"')[1];
-				}
-				if(result[i].includes("Actors")){
-					searchActors = result[i].split(':')[1].split('"')[1];
-				}
-				if(result[i].includes("tomatoRating")){
-					searchTomatoesRating = result[i].split(':')[1].split('"')[1];
-				}
-				if(result[i].includes("tomatoURL")){
-					searchTomatoesURL = result[i].split('":')[1].split('"')[1];
-				}
+				var log = "Title: " + searchTitle +
+					"\r\nYear: " + searchYear +
+					"\r\nIMDB Rating: " + searchRating +
+					"\r\nLanguage(s): " + searchLanguage +
+					"\r\nPlot: " + searchPlot +
+					"\r\nActors: " + searchActors +
+					"\r\nRotten Tomatoes Rating: " + searchTomatoesRating +
+					"\r\nRotten Tomatoes URL: " + searchTomatoesURL
+				console.log("Title: " + searchTitle +
+					"\nYear: " + searchYear +
+					"\nIMDB Rating: " + searchRating +
+					"\nLanguage(s): " + searchLanguage +
+					"\nPlot: " + searchPlot +
+					"\nActors: " + searchActors +
+					"\nRotten Tomatoes Rating: " + searchTomatoesRating +
+					"\nRotten Tomatoes URL: " + searchTomatoesURL);
 			}
-			var log = "Title: " + searchTitle +
-				"\r\nYear: " + searchYear +
-				"\r\nIMDB Rating: " + searchRating +
-				"\r\nLanguage(s): " + searchLanguage +
-				"\r\nPlot: " + searchPlot +
-				"\r\nActors: " + searchActors +
-				"\r\nRotten Tomatoes Rating: " + searchTomatoesRating +
-				"\r\nRotten Tomatoes URL: " + searchTomatoesURL
-			console.log("Title: " + searchTitle +
-				"\nYear: " + searchYear +
-				"\nIMDB Rating: " + searchRating +
-				"\nLanguage(s): " + searchLanguage +
-				"\nPlot: " + searchPlot +
-				"\nActors: " + searchActors +
-				"\nRotten Tomatoes Rating: " + searchTomatoesRating +
-				"\nRotten Tomatoes URL: " + searchTomatoesURL);
-			fs.appendFile('log.txt', "" + log + "\r\n,\r\n", function(err){
-				if(err){
-					console.log(err);
-					return;
-				}
-			});
-		}
+			else{
+				console.log("Invalid search term. Default:");
+				omdbRequest("mr-nobody");
+			}
+		fs.appendFile('log.txt', "" + log + "\r\n,\r\n", function(err){
+			if(err){
+				console.log(err);
+				return;
+			}
+		});
+	}
 	});
 }
 
