@@ -16,15 +16,20 @@ function spotifySearch(trackName){
 		}
 		if(data.tracks.items[0] != undefined){
 			var log = "";
-			for(var i = 0; i < 5; i++){
-				log = log + "\nArtist: " + data.tracks.items[i].artists[0].name +
-				"\r\n Track: " + data.tracks.items[i].name +
-				"\r\n Album: " + data.tracks.items[i].album.name +
-				"\r\n Preview: " + data.tracks.items[i].external_urls.spotify + "\r\n-\r\n";
-				console.log("\n" + "Artist: " + data.tracks.items[i].artists[0].name + "\n" + 
-					"Track: " + data.tracks.items[i].name + "\n" + 
-					"Album: " + data.tracks.items[i].album.name + "\n" +
-					"Preview: " + data.tracks.items[i].external_urls.spotify);
+			for(var i = 1; i <= data.tracks.items.length; i++){
+				if(data.tracks.items[i] != undefined){
+					log = log + "\n" + i + "\r\nArtist: " + data.tracks.items[i].artists[0].name +
+					"\r\nTrack: " + data.tracks.items[i].name +
+					"\r\nAlbum: " + data.tracks.items[i].album.name +
+					"\r\nPreview: " + data.tracks.items[i].external_urls.spotify + "\r\n-\r\n";
+					console.log("\n" + i + "\n" + "Artist: " + data.tracks.items[i].artists[0].name + "\n" + 
+						"Track: " + data.tracks.items[i].name + "\n" + 
+						"Album: " + data.tracks.items[i].album.name + "\n" +
+						"Preview: " + data.tracks.items[i].external_urls.spotify);					
+				}
+				else{
+					i = data.tracks.items.length + 1;
+				}
 			}
 			fs.appendFile('log.txt', "" + log + ",\r\n", function(err){
 				if(err){
